@@ -180,7 +180,22 @@ L.Control.SliderControl = L.Control.extend({
             }
         });
         if (!_options.range && _options.alwaysShowDate) {
-            $('#slider-timestamp').html(_extractTimeStamp(_options.markers[index_start].feature.properties[_options.timeAttribute], _options));
+	    if(_options.markers[index_start].feature !== undefined) {
+		if(_options.markers[index_start].feature.properties[_options.timeAttribute]){
+		    if(_options.markers[index_start]) $('#slider-timestamp').html(
+                                _extractTimestamp(_options.markers[index_start].feature.properties[_options.timeAttribute], _options));
+		}else {
+		    console.error("Time property "+ _options.timeAttribute +" not found in data");
+		}
+	    }else {
+		// set by leaflet Vector Layers
+		if(_options.markers [index_start].options[_options.timeAttribute]){
+		    if(_options.markers[index_start]) $('#slider-timestamp').html(
+				_extractTimestamp(_options.markers[index_start].options[_options.timeAttribute], _options));
+		}else {
+		    console.error("Time property "+ _options.timeAttribute +" not found in data");
+		}
+	    }
         }
         for (i = _options.minValue; i <= index_start; i++) {
             _options.map.addLayer(_options.markers[i]);
